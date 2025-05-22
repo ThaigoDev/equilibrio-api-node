@@ -4,9 +4,9 @@ const HomeController = require("../Controllers/HomeController")
 const LoginAndSignUpController = require("../Controllers/Login&SignUpController")
 
 router.get("/", HomeController.index)  
-router.post("/signup", LoginAndSignUpController.createAccount);
-router.post("/login", LoginAndSignUpController.login);
-
+router.post("/api/auth/register", LoginAndSignUpController.createAccount);
+router.post("/api/auth/login", LoginAndSignUpController.login);
+router.get("/api/auth/me", LoginAndSignUpController.allUsers);
 
 module.exports = router
 

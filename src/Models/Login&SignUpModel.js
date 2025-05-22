@@ -1,16 +1,18 @@
 const mongoose = require("mongoose");
 const validator = require('validator');
 const bcryptjs = require("bcryptjs");
+const  SettingsSchema = require('../Models/SettingsModel')
 
-const SignupSchema = mongoose.Schema({
-   nome: { type: String, required: true },
-   email: { type: String, required: true },
-   password: { type: String, required: true },
+const UserSchema = new mongoose.Schema({
+   name: { type: String, required: true },
+   email: { type: String, unique: true, required: true },
+   password: { type: String, required: true }, 
    passwordConfirmed: { type: String, required: true },
-   userPhoto: { type: String, required: false },
-});
+   settings: SettingsSchema,
+   createdAt: { type: Date, default: Date.now }
+ });
 
-const SignupModel = mongoose.model("Accounts", SignupSchema);
+const SignupModel = mongoose.model("Accounts", UserSchema);
 
 
 class SignUp {

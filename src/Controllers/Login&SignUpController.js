@@ -57,13 +57,18 @@ class LoginAndSignUpController {
       )
     }
   }
-  static async allUsers(req, res) {
+  static async me(req, res) {
     try {
       if (req.session.user) {
         return res.json({
           status: "sucess",
           profile: req.session.user,
         })
+      }else {
+         res.status(401).json({
+          status: "failed",
+          error: "Bad! You not have Permission!",
+        });
       }
 
     } catch (e) {

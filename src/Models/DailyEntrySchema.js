@@ -29,3 +29,21 @@ const DailyEntrySchema = new mongoose.Schema(
 DailyEntrySchema.index({ user: 1, date: 1 }, { unique: true }); // 1 entry/dia 
 
 const DailyEntryModel = mongoose.model('DailyEntry', DailyEntrySchema);
+
+class DailyEntry {
+   constructor(body) { 
+      this.body = body; 
+      this.errors = [];
+      this.dailyEntry = null;
+   } 
+
+   async metGoals(body) {
+      return(
+         body.habits.waterCups >= 8 &&
+         body.habits.exerciseMinutes >= 30&&
+         body.habits.sleepMinutes >= 420
+      ) 
+      
+   } 
+   
+}

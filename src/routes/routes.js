@@ -4,7 +4,10 @@ const HomeController = require("../Controllers/HomeController")
 const LoginAndSignUpController = require("../Controllers/Login&SignUpController"); 
 const DailyEntryController = require("../Controllers/DailyEntryController")
 
-router.get("/", HomeController.index)  
+router.get("/", HomeController.index) 
+router.get("/mostrarDadosPessoais",(req,res)=>{
+   res.send("Olá, Thiago",req)
+})  
 router.post("/api/auth/register", LoginAndSignUpController.createAccount);
 router.post("/api/auth/login", LoginAndSignUpController.login);
 router.get("/api/auth/me", LoginAndSignUpController.me);

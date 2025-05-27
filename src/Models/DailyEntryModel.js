@@ -39,7 +39,7 @@ class DailyEntry {
   }
   async metGoals() {
     return (
-      this.body.habits.waterCups >= 8 &&
+      this.body.habits.waterCups >= 8 && 
       this.body.habits.exerciseMinutes >= 30 &&
       this.body.habits.sleepMinutes >= 420 // 7 horas
     );

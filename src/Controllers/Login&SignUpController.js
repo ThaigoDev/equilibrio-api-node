@@ -10,7 +10,7 @@ class LoginAndSignUpController {
           errors: singUp.errors
         })
 
-      } else {
+      } else { 
         res.status(201).json({
           status: "success",
           message: "A new Account has been Created!",

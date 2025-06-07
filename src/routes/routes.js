@@ -11,6 +11,7 @@ router.get("/mostrarDadosPessoais",(req,res)=>{
 router.post("/api/auth/register", LoginAndSignUpController.createAccount);
 router.post("/api/auth/login", LoginAndSignUpController.login);
 router.get("/api/auth/me", LoginAndSignUpController.me);
-router.post("/api/daily-entry/create",DailyEntryController.create);
+router.post("/api/daily-entry/create",DailyEntryController.submitDailyEntry);
+router.get("/api/daily-entry/mydailyEntries",DailyEntryController.getDailyEntries);
 module.exports = router
 

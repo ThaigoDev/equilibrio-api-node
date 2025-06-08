@@ -149,43 +149,43 @@ class DailyEntry {
      * Calcula e aplica o `streakCount` baseado nas entradas anteriores e metas.
      * Esta função atualiza `this.body.streakCount`.
      */
-    async _calculateAndApplyStreak() {
-        const userId = this.body.user;
-        const currentDate = this.body.date; // Já normalizado para o início do dia UTC
+   async _calculateAndApplyStreak() {
+        const userId = this.body.user;
+        const currentDate = this.body.date; // Já normalizado para o início do dia UTC
 
-        const yesterdayDate = new Date(currentDate);
-        yesterdayDate.setUTCDate(currentDate.getUTCDate() - 1); // Calcula a data de ontem em UTC
+        const yesterdayDate = new Date(currentDate);
+        yesterdayDate.setUTCDate(currentDate.getUTCDate() - 1); // Calcula a data de ontem em UTC
 
-        // Busca a entrada de ontem para o mesmo usuário
-        const yesterdayEntry = await DailyEntryModel.findOne({ user: userId, date: yesterdayDate });
+        // Busca a entrada de ontem para o mesmo usuário
+        const yesterdayEntry = await DailyEntryModel.findOne({ user: userId, date: yesterdayDate });
 
-        let currentStreak = 0; // Inicializa o streak para 0
+        let currentStreak = 0; // Inicializa o streak para 0
 
-        // Verifica se as metas de hoje foram atingidas
-        const todayGoalsMet = DailyEntry.metGoals(this.body.habits);
+        // Verifica se as metas de hoje foram atingidas
+        const todayGoalsMet = DailyEntry.metGoals(this.body.habits);
 
-        // Lógica do Streak
-        if (todayGoalsMet) {
-            // Se as metas de hoje foram batidas:
-            // Obtém o dia da semana em UTC (0 para domingo, 1 para segunda, ..., 6 para sábado)
-            if (currentDate.getUTCDay() === 0) { // Se for domingo (início da semana para reset)
-                currentStreak = 1; // Reseta o streak para 1 para a nova semana
-            } else if (yesterdayEntry && DailyEntry.metGoals(yesterdayEntry.habits)) {
-                // Se a entrada de ontem existe E as metas de ontem foram batidas, continua o streak
-                currentStreak = yesterdayEntry.streakCount + 1;
-            } else {
-                // Se as metas de hoje foram batidas, MAS não havia entrada de ontem OU as metas de ontem NÃO foram batidas,
-                // significa que a sequência foi quebrada ou é o primeiro dia.
-                currentStreak = 1; // Inicia um novo streak de 1 dia.
-            }
-        } else {
-            // Se as metas de hoje NÃO forem batidas, o streak é resetado para 0
-            currentStreak = 0;
-        }
+        // Lógica do Streak
+        if (todayGoalsMet) {
+            // Se hoje as metas foram batidas:
+            // Obtém o dia da semana em UTC (0 para domingo, 1 para segunda, ..., 6 para sábado)
+            if (currentDate.getUTCDay() === 0) { // Se for domingo (início da semana para reset)
+                currentStreak = 1; // Reseta o streak para 1 para a nova semana
+            } else if (yesterdayEntry && DailyEntry.metGoals(yesterdayEntry.habits)) {
+                // Se a entrada de ontem existe e as metas de ontem foram batidas, continua o streak
+                currentStreak = yesterdayEntry.streakCount + 1;
+            } else {
+                // Se as metas de hoje foram batidas, mas não havia entrada de ontem ou as metas de ontem não foram batidas,
+                // inicia um novo streak de 1 dia.
+                currentStreak = 1;
+            }
+        } else {
+            // Se as metas de hoje não forem batidas, o streak é resetado para 0
+            currentStreak = 0;
+        }
 
-        // Aplica o streak calculado ao corpo da entrada antes de salvar
-        this.body.streakCount = currentStreak;
-    }
+        // Aplica o streak calculado ao corpo da entrada antes de salvar
+        this.body.streakCount = currentStreak;
+    }
     /**
      * Salva (cria ou atualiza) uma entrada diária no banco de dados.
      * Calcula o streak antes de salvar.

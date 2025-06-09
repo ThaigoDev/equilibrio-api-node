@@ -250,6 +250,9 @@ class DailyEntry {
             console.error('Erro ao buscar entradas diárias:', e);
             throw new Error('Não foi possível buscar as entradas diárias.');
         }
+    } 
+    async updateFrom() {
+        this.dailyEntry = await DailyEntryModel.findByIdAndUpadate(this.body.user, this.body, {new:true})
     }
 }
 

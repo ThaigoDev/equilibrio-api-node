@@ -12,6 +12,7 @@ router.post("/api/auth/register", LoginAndSignUpController.createAccount);
 router.post("/api/auth/login", LoginAndSignUpController.login);
 router.get("/api/auth/me", LoginAndSignUpController.me);
 router.post("/api/daily-entry/create",DailyEntryController.submitDailyEntry);
-router.get("/api/daily-entry/mydailyEntries",DailyEntryController.getDailyEntries);
+router.get("/api/daily-entry/mydailyEntries",DailyEntryController.getDailyEntries);  
+router.post("/api/daily-entry/update/:id",DailyEntryController.updateA);
 module.exports = router
 

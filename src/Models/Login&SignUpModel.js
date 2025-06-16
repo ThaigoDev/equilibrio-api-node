@@ -54,7 +54,8 @@ class SignUp {
    async register() {
       const salt = bcryptjs.genSaltSync();
       this.body.password = bcryptjs.hashSync(this.body.password, salt);
-      this.body.passwordConfirmed = bcryptjs.hashSync(this.body.passwordConfirmed, salt);
+      this.body.passwordConfirmed = bcryptjs.hashSync(this.body.passwordConfirmed, salt); 
+      const user = {name : this.body.name, email : this.body.email,password : this.body.password,passwordConfirmed : this.body.passwordConfirmed, settings:{notifyEnabled:true,notifyHour:"21:00",goals:{waterCups:8,exerciseMinutes:45,sleepMinutes:700,weight:75,streakDays:0}}}
       this.validation();
 
       if (this.errors.length === 0) {

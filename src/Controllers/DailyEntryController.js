@@ -82,14 +82,14 @@ class DailyEntryController {
     } 
     static async updateA(req,res) {
         try{
-             const userId = req.params.user || 'dummyUserId';  
-             const dailyEntryInstance = new DailyEntry({
+            const userId = req.params.user || 'dummyUserId'; 
+            const dailyEntryInstance = new DailyEntry({
             ...req.body, // Inclui todos os dados do corpo da requisição
             user: userId // Sobrescreve o ID do usuário com o ID autenticado/fornecido 
 
         }); 
-         await dailyEntryInstance.updateFrom(); 
-          res.status(200).json({
+        await dailyEntryInstance.updateFrom(); 
+        res.status(200).json({
             status: "success",
             message: "Dado atualizado com sucesso!",
             data: dailyEntryInstance.dailyEntry // Contém o objeto com o streakCount atualizado

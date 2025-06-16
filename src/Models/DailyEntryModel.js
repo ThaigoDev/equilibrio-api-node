@@ -9,7 +9,7 @@ const DailyEntrySchema = new mongoose.Schema(
             required: true,
             index: true // Otimiza a busca por usuário
         },
-        date: { type: Date, required: true }, // Data da entrada (formato YYYY-MM-DD)
+        date: { type: Date, required: true }, // Data da entrada (formato ISO-MM-DD)
         mood: { // 5 opções de emoji ou estados de humor
             type: String,
             enum: ['very_happy', 'happy', 'neutral', 'sad', 'very_sad'],
@@ -45,17 +45,20 @@ class DailyEntry {
      * Verifica se as metas diárias de hábitos foram atingidas.
      * @param {Object} habits - Objeto contendo os hábitos e seus valores.
      * @returns {boolean} - True se as metas forem atingidas, false caso contrário.
-     * Se um hábito não for fornecido, ele é considerado como meta atingida.
+     * Importante: Se um hábito não for fornecido (undefined), ele NÃO é considerado como meta atingida.
+     * Para um hábito contar, ele deve ter um valor e atingir a meta.
      */
     static metGoals(habits) {
-        if (!habits) return false; // Se não há hábitos, não há metas atingidas
+        if (!habits) return false; // Se não há objeto de hábitos, não há metas atingidas
 
-        // Verifica cada meta. Se um hábito não é definido (undefined), é considerado atingido.
-        return (
-            (habits.waterCups === undefined || habits.waterCups >= 8) &&
-            (habits.exerciseMinutes === undefined || habits.exerciseMinutes >= 30) &&
-            (habits.sleepMinutes === undefined || habits.sleepMinutes >= 420) // 7 horas = 420 minutos
-        );
+        // As metas são consideradas atingidas APENAS se o valor do hábito for fornecido
+        // E atender ao requisito. Se um hábito não for fornecido (undefined),
+        // ele NÃO contribui para a meta atingida.
+        const waterMet = habits.waterCups !== undefined && habits.waterCups >= 8;
+        const exerciseMet = habits.exerciseMinutes !== undefined && habits.exerciseMinutes >= 30;
+        const sleepMet = habits.sleepMinutes !== undefined && habits.sleepMinutes >= 420; // 7 horas = 420 minutos
+
+        return waterMet && exerciseMet && sleepMet;
     }
 
     /**
@@ -166,7 +169,6 @@ class DailyEntry {
 
         // Lógica do Streak
         if (todayGoalsMet) {
-            // Se as metas de hoje foram batidas:
             // Obtém o dia da semana em UTC (0 para domingo, 1 para segunda, ..., 6 para sábado)
             if (currentDate.getUTCDay() === 0) { // Se for domingo (início da semana para reset)
                 currentStreak = 1; // Reseta o streak para 1 para a nova semana
@@ -252,7 +254,9 @@ class DailyEntry {
         }
     } 
     async updateFrom() {
-        this.dailyEntry = await DailyEntryModel.findByIdAndUpadate(this.body.user, this.body, {new:true})
+        // Correção de digitação: findByIdAndUpadate para findByIdAndUpdate
+        // Verifique se o ID está sendo passado corretamente para a atualização
+        this.dailyEntry = await DailyEntryModel.findByIdAndUpdate(this.body.user, this.body, {new:true})
     }
 }
 

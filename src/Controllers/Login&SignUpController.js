@@ -18,7 +18,8 @@ class LoginAndSignUpController {
                streakDays: 0 
             } 
          } 
-      }
+      } 
+      console.log(user)
       const singUp = new SignUp(user);
       await singUp.register();
       if (singUp.errors.length > 0) {

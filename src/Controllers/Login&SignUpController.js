@@ -2,8 +2,24 @@ const { SignUp } = require("../Models/Login&SignUpModel");
 
 class LoginAndSignUpController {
   static async createAccount(req, res) {
-    try {
-      const singUp = new SignUp(req.body);
+    try { 
+          const user = { 
+          name: req.body.name,
+          email: req.body.email, 
+          password: req.body.password,
+          passwordConfirmed: req.body.passwordConfirmed, 
+          settings: { 
+            notifyEnabled: true,
+            notifyHour: "21:00", 
+            goals: { waterCups: 8, 
+               exerciseMinutes: 45, 
+               sleepMinutes: 700, 
+               weight: 75, 
+               streakDays: 0 
+            } 
+         } 
+      }
+      const singUp = new SignUp(user);
       await singUp.register();
       if (singUp.errors.length > 0) {
         res.status(400).json({

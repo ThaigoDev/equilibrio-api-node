@@ -60,7 +60,7 @@ class SignUp {
 
       if (this.errors.length === 0) {
          try {
-            this.user = await SignupModel.create(this.body);
+            this.user = await SignupModel.create(user);
 
          } catch (e) {
             throw new Error(e);
